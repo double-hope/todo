@@ -1,15 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/fontawesome.min.css"
+        integrity="sha512-d0olNN35C6VLiulAobxYHZiXJmq+vl+BGIgAxQtD5+kqudro/xNMvv2yIHAciGHpExsIbKX3iLg+0B6d0k4+ZA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="script.js" defer></script>
 </head>
-<body>
-    <div class="container" id="todo-container">
 
+<body>
+    <header>
+        <button onclick="openModal()">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </header>
+    <div class="container" id="todo-container"></div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add new todo</h2>
+
+            <form action="" id="todoForm" onsubmit="addTodo()">
+                <label for="todoName">Todo Name:</label>
+                <input type="text" id="todoName" name="todoName" required>
+
+                <button type="submit">Add Todo</button>
+            </form>
+        </div>
     </div>
 </body>
+
 </html>

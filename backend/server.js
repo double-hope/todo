@@ -8,6 +8,7 @@ dotenv.config();
 const app = express()
 const port = process.env.PORT | 3000;
 
+app.use(express.json());
 app.use(corsCredentials);
 
 app.get('/', (req, res) => {
@@ -19,6 +20,26 @@ app.get('/', (req, res) => {
     res.json(todos);
   } catch (error) {
     console.error('Error reading or parsing JSON file:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/', (req, res) => {
+  try {
+    const json = fs.readFileSync('todos.json', 'utf-8');
+    const todos = JSON.parse(json);
+
+    const newTodo = {
+      id: generateUniqueId(),
+      text: req.body.name,
+      done: false,
+    };
+
+    todos.push(newTodo);
+    fs.writeFileSync('todos.json', JSON.stringify(todos, null, 2), 'utf-8');
+    res.json(todos);
+  } catch (error) {
+    console.error('Cannot add todo:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -47,3 +68,7 @@ app.put('/:id', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
+
+function generateUniqueId() {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
