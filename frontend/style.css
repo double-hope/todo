@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.todo-item {
+    display: flex;
+    gap: 20px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.todo-item:hover {
+    background-color: rgba(0, 0, 0, .1);
+}
+
+.done {
+    text-decoration: line-through;
+}
