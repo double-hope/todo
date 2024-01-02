@@ -5,7 +5,7 @@ import { corsCredentials } from './corsCredentials.js';
 
 dotenv.config();
 
-const app = express()
+const app = express();
 const port = process.env.PORT | 3000;
 
 app.use(express.json());
@@ -31,7 +31,7 @@ app.post('/', (req, res) => {
 
     const newTodo = {
       id: generateUniqueId(),
-      text: req.body.name,
+      text: req.body.text,
       done: false,
       endDate: req.body.endDate
     };
@@ -54,8 +54,8 @@ app.put('/:id', (req, res) => {
     const todoToUpdate = todos.find(todo => todo.id === todoId);
 
     if (todoToUpdate) {
-      if (req.body.name) {
-        todoToUpdate.name = req.body.name;
+      if (req.body.text) {
+        todoToUpdate.text = req.body.text;
       }
 
       if (req.body.endDate) {
@@ -72,7 +72,6 @@ app.put('/:id', (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 app.put('/:id/status', (req, res) => {
   try {

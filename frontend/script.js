@@ -57,17 +57,16 @@ function getAllTodos() {
 
 function addTodo() {
   event.preventDefault();
-  var name = document.getElementById("addTodoName").value;
+  var text = document.getElementById("addTodoText").value;
   var endDate = document.getElementById("addEndDate").value;
-
-  console.log(name);
+console.log(text);
   fetch(apiUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      name,
+      text,
       endDate,
     }),
   })
@@ -81,14 +80,14 @@ function editTodo(id) {
   const todoToEdit = todos.find(todo => todo.id === id);
   openModal(editModal);
 
-  document.getElementById("editTodoName").value = todoToEdit.text;
+  document.getElementById("editTodoText").value = todoToEdit.text;
   document.getElementById("editEndDate").value = todoToEdit.endDate;
 
   const editForm = document.getElementById("editTodoForm");
   editForm.onsubmit = function (event) {
     event.preventDefault();
 
-    const newName = document.getElementById("editTodoName").value;
+    const newText = document.getElementById("editTodoText").value;
     const newEndDate = document.getElementById("editEndDate").value;
 
     fetch(`${apiUrl}${id}`, {
@@ -97,13 +96,13 @@ function editTodo(id) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: newName,
+        text: newText,
         endDate: newEndDate,
       }),
     })
       .then(() => closeModal(editModal))
       .catch((error) => {
-        console.error("Error fetching todos:", error);
+        console.error("Error editing todos:", error);
       });
   };
 }
@@ -113,7 +112,7 @@ function changeStatus(id) {
     method: "PUT"
   })
   .catch((error) => {
-    console.error("Error fetching todos:", error);
+    console.error("Error editing todos:", error);
   });
 }
 
