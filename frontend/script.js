@@ -27,9 +27,20 @@ function showAllTodos(todos) {
 
     cell1.innerHTML = todo.text;
     cell2.innerHTML = todo.endDate;
-    cell3.innerHTML = `<input type="checkbox" ${todo.done ? 'checked' : ''} onclick="changeStatus('${todo.id}')">`;
+    cell3.innerHTML = `<input type="checkbox" ${
+      todo.done ? "checked" : ""
+    } onclick="changeStatus('${todo.id}')">`;
     cell4.innerHTML = `<button class="edit-btn" onclick="editTodo('${todo.id}')">Edit</button>`;
     cell5.innerHTML = `<button class="delete-btn" onclick="deleteTodo('${todo.id}')">Delete</button>`;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const endDate = new Date(todo.endDate);
+    endDate.setHours(0, 0, 0, 0);
+    
+    if (endDate.getTime() <= today.getTime()) {
+      cell2.classList.add("late");
+    }
   }
 
   container.appendChild(table);
@@ -59,7 +70,7 @@ function addTodo() {
   event.preventDefault();
   var text = document.getElementById("addTodoText").value;
   var endDate = document.getElementById("addEndDate").value;
-console.log(text);
+
   fetch(apiUrl, {
     method: "POST",
     headers: {
@@ -70,14 +81,19 @@ console.log(text);
       endDate,
     }),
   })
-    .then(() => addModal.style.display = "none")
+    .then((response) => response.json())
+    .then((data) => {
+      todos = data;
+      showAllTodos(data);
+      closeModal(addModal);
+    })
     .catch((error) => {
       console.error("Error adding todo:", error);
     });
 }
 
 function editTodo(id) {
-  const todoToEdit = todos.find(todo => todo.id === id);
+  const todoToEdit = todos.find((todo) => todo.id === id);
   openModal(editModal);
 
   document.getElementById("editTodoText").value = todoToEdit.text;
@@ -100,7 +116,12 @@ function editTodo(id) {
         endDate: newEndDate,
       }),
     })
-      .then(() => closeModal(editModal))
+      .then((response) => response.json())
+      .then((data) => {
+        todos = data;
+        showAllTodos(data);
+        closeModal(editModal);
+      })
       .catch((error) => {
         console.error("Error editing todos:", error);
       });
@@ -109,17 +130,21 @@ function editTodo(id) {
 
 function changeStatus(id) {
   fetch(`${apiUrl}${id}/status`, {
-    method: "PUT"
-  })
-  .catch((error) => {
+    method: "PUT",
+  }).catch((error) => {
     console.error("Error editing todos:", error);
   });
 }
 
 function deleteTodo(id) {
   fetch(`${apiUrl}${id}`, {
-    method: "DELETE"
+    method: "DELETE",
   })
+    .then((response) => response.json())
+    .then((data) => {
+      todos = data;
+      showAllTodos(data);
+    })
     .catch((error) => {
       console.error("Error deleting todo:", error);
     });
@@ -130,7 +155,7 @@ window.onload = function () {
 
   document.getElementById("openAddModal").addEventListener("click", () => {
     openModal(addModal);
-  })
+  });
 
   const spans = document.getElementsByClassName("close");
   for (const span of spans) {

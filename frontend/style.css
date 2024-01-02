@@ -168,3 +168,8 @@ th {
 .edit-btn:hover, .delete-btn:hover {
     background-color: #ddd;
 }
+
+.late {
+    color: rgb(225, 0, 0);
+    font-weight: 600;
+}
